@@ -41,8 +41,8 @@ func NewLogger(log *zap.Logger, config logger.Config) logger.Interface {
 		warnStr = logger.BlueBold + "%s" + logger.Reset + logger.Magenta + "[warn] " + logger.Reset
 		errStr = logger.Magenta + "%s" + logger.Reset + logger.Red + "[error] " + logger.Reset
 		traceStr = logger.Green + "%s" + logger.Reset + logger.Yellow + "[%.3fms] " + logger.BlueBold + "[rows:%v]" + logger.Reset + " %s"
-		traceWarnStr = logger.Green + "%s " + logger.Yellow + "%s\n" + logger.Reset + logger.RedBold + "[%.3fms] " + logger.Yellow + "[rows:%v]" + logger.Magenta + " %s" + logger.Reset
-		traceErrStr = logger.RedBold + "%s " + logger.MagentaBold + "%s\n" + logger.Reset + logger.Yellow + "[%.3fms] " + logger.BlueBold + "[rows:%v]" + logger.Reset + " %s"
+		traceWarnStr = logger.Green + "%s " + logger.Yellow + "%s" + logger.Reset + logger.RedBold + "[%.3fms] " + logger.Yellow + "[rows:%v]" + logger.Magenta + " %s" + logger.Reset
+		traceErrStr = logger.RedBold + "%s " + logger.MagentaBold + "%s" + logger.Reset + logger.Yellow + "[%.3fms] " + logger.BlueBold + "[rows:%v]" + logger.Reset + " %s"
 	}
 
 	return &loggerPoint{
@@ -110,16 +110,16 @@ func (l loggerPoint) Trace(ctx context.Context, begin time.Time, fc func() (stri
 		sql, rows := fc()
 		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
 		if rows == -1 {
-			l._warn(ctx, l.traceErrStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-", sql)
+			l._warn(ctx, l.traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-", sql)
 		} else {
-			l._warn(ctx, l.traceErrStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
+			l._warn(ctx, l.traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	case l.LogLevel == logger.Info:
 		sql, rows := fc()
 		if rows == -1 {
-			l._info(ctx, l.traceErrStr, utils.FileWithLineNum(), utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-", sql)
+			l._info(ctx, l.traceStr, utils.FileWithLineNum(), utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, "-", sql)
 		} else {
-			l._info(ctx, l.traceErrStr, utils.FileWithLineNum(), utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
+			l._info(ctx, l.traceStr, utils.FileWithLineNum(), utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	}
 }

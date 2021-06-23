@@ -54,8 +54,8 @@ func NewDB(cfg *config.MySQLConfig, logger *zap.Logger) (*DB, func()) {
 		_db.SetConnMaxIdleTime(time.Duration(cfg.GetConnConfig().GetConnMaxIdleSecond()) * time.Second)
 	} else {
 		_db.SetConnMaxIdleTime(3600 * time.Second)
-
 	}
+
 	return &DB{db: db}, func() {
 		err := _db.Close()
 		fmt.Println("mysql close , err info ", err)

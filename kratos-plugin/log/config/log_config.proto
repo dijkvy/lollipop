@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package logconfig;
+
+option go_package = "kratos-plugin/log/config;config";
+
+// 日志初始化配置, proto3 optional 特性
+message Config {
+  string          level                     = 1; // 日志等级
+  string          path                      = 2; // 日志文件的路径
+
+  optional uint32 max_size                  = 3; // 文件容量的最大值，单位是 mb
+  optional uint32 max_backup                = 4; // 最大文件的保留数量
+  optional uint32 max_age                   = 5; // 保存的最大天数
+  optional bool   compress                  = 6; // 是否压缩日志
+  optional bool   debug_mode_output_console = 7; // debug 模式下输出到控制台
+}

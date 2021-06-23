@@ -5,7 +5,7 @@ package logconfig;
 option go_package = "kratos-plugin/log/config;config";
 
 // 日志初始化配置, proto3 optional 特性
-message Config {
+message ZapLoggerConfig {
   string          level                     = 1; // 日志等级
   string          path                      = 2; // 日志文件的路径
 

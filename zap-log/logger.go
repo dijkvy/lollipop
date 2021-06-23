@@ -46,8 +46,6 @@ func NewZapLogger(cfg *config.ZapLoggerConfig) (logger *zap.Logger) {
 
 	var logLevel = zap.DebugLevel
 
-
-
 	switch cfg.GetLevel() {
 	case LevelDebug:
 		logLevel = zap.DebugLevel
@@ -139,7 +137,6 @@ func NewZapLogger(cfg *config.ZapLoggerConfig) (logger *zap.Logger) {
 			zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(os.Stdout), logLevel), //同时将日志输出到控制台，NewJSONEncoder 是结构化输出
 		)
 	}
-
 
 	return zap.New(core, zap.AddCaller(), zap.AddCallerSkip(2))
 }

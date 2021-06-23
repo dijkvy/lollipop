@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package db.config;
+
+option go_package = "gorm-plugin/db/config;config";
+import "google/protobuf/timestamp.proto";
+
+// mysql 数据库链接配置
+message MySQLConfig {
+  string     dsn         = 1; // 数据源
+  ConnConfig conn_config = 2; // 链接配置
+  LogConfig  log_config  = 3; // 日志配置
+}
+
+message ConnConfig {
+  optional int64 conn_max_idle_second = 1; // 单位是秒
+  optional int64 conn_max_life_second = 2; // 单位是秒
+  optional int32 max_open_conn        = 3; // 最大链接数量
+  optional int32 max_idle_conn        = 4; // 最大空闲链接数量
+}
+
+message LogConfig {
+  enum LogLevel {
+    Unknown = 0;
+    Info    = 1;
+    Warn    = 2;
+    Error   = 3;
+  }
+  LogLevel       level           = 1; // 日志等级
+  optional int64 slow_log_second = 2; // 慢查询日志
+}

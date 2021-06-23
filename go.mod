@@ -1,5 +1,13 @@
-module lollipop
+module github.com/laxiaohong/lollipop
 
 go 1.16
 
-require google.golang.org/protobuf v1.26.0
+require (
+	github.com/go-kratos/kratos/v2 v2.0.0-rc6
+	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/spf13/cast v1.3.1
+	go.opentelemetry.io/otel/trace v0.20.0
+	go.uber.org/zap v1.17.0
+	google.golang.org/protobuf v1.26.0
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
+)

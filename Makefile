@@ -6,6 +6,6 @@ log_config:
            --proto_path=. \
            --go_out=. \
            --go-grpc_out=. \
-           ./kratos-plugin/log/config/log_config.proto
+           ./zap-log/init/config/log_config.proto
 
 

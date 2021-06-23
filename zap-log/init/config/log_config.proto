@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package logconfig;
 
-option go_package = "kratos-plugin/log/config;config";
+option go_package = "zap-log/init/config;config";
 
 // 日志初始化配置, proto3 optional 特性
 message ZapLoggerConfig {

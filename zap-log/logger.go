@@ -78,24 +78,9 @@ func NewZapLogger(cfg *config.ZapLoggerConfig) (logger *zap.Logger) {
 		}, //
 	}
 
-	// debug  level log, 如果是 debug 级别, 将会输出所有的日志
-	debugLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return logLevel == zap.DebugLevel
-	})
-
-	// info level log
-	infoLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl == zapcore.InfoLevel && lvl >= logLevel
-	})
-
-	// warn level log
-	warnLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl == zapcore.WarnLevel && lvl >= logLevel
-	})
-
-	// error level log
-	errorLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-		return lvl == zapcore.ErrorLevel && lvl >= logLevel
+	// 将所有的日志文件输出到同一个文件
+	bizLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl >= logLevel
 	})
 
 	// 保留文件的最大数量
@@ -117,17 +102,11 @@ func NewZapLogger(cfg *config.ZapLoggerConfig) (logger *zap.Logger) {
 	}
 
 	// writer
-	debugWriter := getWriter(cfg.Path+string(filepath.Separator)+"debug.log", maxBackupSize, maxAge, maxSize, cfg.GetCompress())
-	infoWriter := getWriter(cfg.Path+string(filepath.Separator)+"info.log", maxBackupSize, maxAge, maxSize, cfg.GetCompress())
-	warnWriter := getWriter(cfg.Path+string(filepath.Separator)+"warn.log", maxBackupSize, maxAge, maxSize, cfg.GetCompress())
-	errorWriter := getWriter(cfg.Path+string(filepath.Separator)+"error.log", maxBackupSize, maxAge, maxSize, cfg.GetCompress())
+	bizWriter := getWriter(cfg.Path+string(filepath.Separator)+"biz.log", maxBackupSize, maxAge, maxSize, cfg.GetCompress())
 
 	// 输出多个
 	core := zapcore.NewTee(
-		zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(debugWriter), debugLevel), // debug 日志记录所有的日志
-		zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(infoWriter), infoLevel),   // 将info及以下写入logPath，NewConsoleEncoder 是非结构化输出
-		zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(warnWriter), warnLevel),   // warn及以上写入 warnPath
-		zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(errorWriter), errorLevel), // 将 error log 写入 error path
+		zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(bizWriter), bizLevel), // biz 日志
 	)
 
 	// debug 日志级别是否输出到控制台
@@ -138,7 +117,7 @@ func NewZapLogger(cfg *config.ZapLoggerConfig) (logger *zap.Logger) {
 		)
 	}
 
-	return zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
+	return zap.New(core, zap.AddCaller(), zap.AddCallerSkip(2))
 }
 
 func getWriter(filename string, maxBackup, maxAge, maxSize int, compress bool) io.Writer {

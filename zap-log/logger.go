@@ -138,7 +138,7 @@ func NewZapLogger(cfg *config.ZapLoggerConfig) (logger *zap.Logger) {
 		)
 	}
 
-	return zap.New(core, zap.AddCaller(), zap.AddCallerSkip(2))
+	return zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
 }
 
 func getWriter(filename string, maxBackup, maxAge, maxSize int, compress bool) io.Writer {

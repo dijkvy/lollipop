@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/go-kratos/kratos/v2 v2.0.0-rc6
+	github.com/google/wire v0.5.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cast v1.3.1

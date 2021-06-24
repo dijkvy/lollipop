@@ -26,13 +26,20 @@ type ZapLoggerConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Level                  string  `protobuf:"bytes,1,opt,name=level,proto3" json:"level,omitempty"`                                                                            // 日志等级
-	Path                   string  `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`                                                                              // 日志文件的路径
-	MaxSize                *uint32 `protobuf:"varint,3,opt,name=max_size,json=maxSize,proto3,oneof" json:"max_size,omitempty"`                                                  // 文件容量的最大值，单位是 mb
-	MaxBackup              *uint32 `protobuf:"varint,4,opt,name=max_backup,json=maxBackup,proto3,oneof" json:"max_backup,omitempty"`                                            // 最大文件的保留数量
-	MaxAge                 *uint32 `protobuf:"varint,5,opt,name=max_age,json=maxAge,proto3,oneof" json:"max_age,omitempty"`                                                     // 保存的最大天数
-	Compress               *bool   `protobuf:"varint,6,opt,name=compress,proto3,oneof" json:"compress,omitempty"`                                                               // 是否压缩日志
-	DebugModeOutputConsole *bool   `protobuf:"varint,7,opt,name=debug_mode_output_console,json=debugModeOutputConsole,proto3,oneof" json:"debug_mode_output_console,omitempty"` // debug 模式下输出到控制台
+	// @inject_tag: toml:"level"
+	Level string `protobuf:"bytes,1,opt,name=level,proto3" json:"level,omitempty" toml:"level"` // 日志等级
+	// @inject_tag: toml:"path"
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty" toml:"path"` // 日志文件的路径
+	// @inject_tag: toml:"max_size"
+	MaxSize *uint32 `protobuf:"varint,3,opt,name=max_size,json=maxSize,proto3,oneof" json:"max_size,omitempty" toml:"max_size"` // 文件容量的最大值，单位是 mb
+	// @inject_tag: toml:"max_backup"
+	MaxBackup *uint32 `protobuf:"varint,4,opt,name=max_backup,json=maxBackup,proto3,oneof" json:"max_backup,omitempty" toml:"max_backup"` // 最大文件的保留数量
+	// @inject_tag: toml:"max_age"
+	MaxAge *uint32 `protobuf:"varint,5,opt,name=max_age,json=maxAge,proto3,oneof" json:"max_age,omitempty" toml:"max_age"` // 保存的最大天数
+	// @inject_tag: toml:"compress"
+	Compress *bool `protobuf:"varint,6,opt,name=compress,proto3,oneof" json:"compress,omitempty" toml:"compress"` // 是否压缩日志
+	// @inject_tag: toml:"debug_mode_output_console"
+	DebugModeOutputConsole *bool `protobuf:"varint,7,opt,name=debug_mode_output_console,json=debugModeOutputConsole,proto3,oneof" json:"debug_mode_output_console,omitempty" toml:"debug_mode_output_console"` // debug 模式下输出到控制台
 }
 
 func (x *ZapLoggerConfig) Reset() {

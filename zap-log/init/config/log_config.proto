@@ -6,12 +6,25 @@ option go_package = "zap-log/init/config;config";
 
 // 日志初始化配置, proto3 optional 特性
 message ZapLoggerConfig {
+
+  // @inject_tag: toml:"level"
   string          level                     = 1; // 日志等级
+
+  // @inject_tag: toml:"path"
   string          path                      = 2; // 日志文件的路径
 
+  // @inject_tag: toml:"max_size"
   optional uint32 max_size                  = 3; // 文件容量的最大值，单位是 mb
+
+  // @inject_tag: toml:"max_backup"
   optional uint32 max_backup                = 4; // 最大文件的保留数量
+
+  // @inject_tag: toml:"max_age"
   optional uint32 max_age                   = 5; // 保存的最大天数
+
+  // @inject_tag: toml:"compress"
   optional bool   compress                  = 6; // 是否压缩日志
+
+  // @inject_tag: toml:"debug_mode_output_console"
   optional bool   debug_mode_output_console = 7; // debug 模式下输出到控制台
 }

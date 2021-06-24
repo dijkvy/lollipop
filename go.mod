@@ -3,6 +3,7 @@ module github.com/laxiaohong/lollipop
 go 1.16
 
 require (
+	github.com/favadi/protoc-go-inject-tag v1.1.0 // indirect
 	github.com/go-kratos/kratos/v2 v2.0.0-rc6
 	github.com/google/wire v0.5.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible

@@ -78,6 +78,22 @@ func NewZapLogger(cfg *config.ZapLoggerConfig) (logger *zap.Logger) {
 		}, //
 	}
 
+	// 控制台输出配置
+	consoleEncoderConfig := zapcore.EncoderConfig{
+		MessageKey:    "msg",
+		LevelKey:      "level",
+		TimeKey:       "ts",
+		CallerKey:     "file",
+		EncodeLevel:   zapcore.CapitalColorLevelEncoder,
+		EncodeCaller:  zapcore.ShortCallerEncoder,
+		StacktraceKey: "stack",
+		EncodeTime: func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+			enc.AppendString(t.Format("2006-01-02 15:04:05.9999999"))
+		}, // time format
+		EncodeDuration: func(d time.Duration, enc zapcore.PrimitiveArrayEncoder) {
+			enc.AppendInt64(int64(d) / 10e6)
+		}, //
+	}
 	// 将所有的日志文件输出到同一个文件
 	bizLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
 		return lvl >= logLevel
@@ -113,7 +129,7 @@ func NewZapLogger(cfg *config.ZapLoggerConfig) (logger *zap.Logger) {
 	if cfg.DebugModeOutputConsole != nil && (*cfg.DebugModeOutputConsole && (strings.ToLower(cfg.Level) == "debug")) {
 
 		core = zapcore.NewTee(core,
-			zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(os.Stdout), logLevel), //同时将日志输出到控制台，NewJSONEncoder 是结构化输出
+			zapcore.NewCore(zapcore.NewConsoleEncoder(consoleEncoderConfig), zapcore.AddSync(os.Stdout), logLevel), //同时将日志输出到控制台，NewJSONEncoder 是结构化输出
 		)
 	}
 

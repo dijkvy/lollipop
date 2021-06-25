@@ -79,9 +79,12 @@ type MySQLConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Dsn        string      `protobuf:"bytes,1,opt,name=dsn,proto3" json:"dsn,omitempty"`                                 // 数据源
-	ConnConfig *ConnConfig `protobuf:"bytes,2,opt,name=conn_config,json=connConfig,proto3" json:"conn_config,omitempty"` // 链接配置
-	LogConfig  *LogConfig  `protobuf:"bytes,3,opt,name=log_config,json=logConfig,proto3" json:"log_config,omitempty"`    // 日志配置
+	// @inject_tag: toml:"dsn"
+	Dsn string `protobuf:"bytes,1,opt,name=dsn,proto3" json:"dsn,omitempty" toml:"dsn"` // 数据源
+	// @inject_tag: toml:"conn_config"
+	ConnConfig *ConnConfig `protobuf:"bytes,2,opt,name=conn_config,json=connConfig,proto3" json:"conn_config,omitempty" toml:"conn_config"` // 链接配置
+	// @inject_tag: toml:"log_config"
+	LogConfig *LogConfig `protobuf:"bytes,3,opt,name=log_config,json=logConfig,proto3" json:"log_config,omitempty" toml:"log_config"` // 日志配置
 }
 
 func (x *MySQLConfig) Reset() {
@@ -142,10 +145,14 @@ type ConnConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ConnMaxIdleSecond *int64 `protobuf:"varint,1,opt,name=conn_max_idle_second,json=connMaxIdleSecond,proto3,oneof" json:"conn_max_idle_second,omitempty"` // 单位是秒
-	ConnMaxLifeSecond *int64 `protobuf:"varint,2,opt,name=conn_max_life_second,json=connMaxLifeSecond,proto3,oneof" json:"conn_max_life_second,omitempty"` // 单位是秒
-	MaxOpenConn       *int32 `protobuf:"varint,3,opt,name=max_open_conn,json=maxOpenConn,proto3,oneof" json:"max_open_conn,omitempty"`                     // 最大链接数量
-	MaxIdleConn       *int32 `protobuf:"varint,4,opt,name=max_idle_conn,json=maxIdleConn,proto3,oneof" json:"max_idle_conn,omitempty"`                     // 最大空闲链接数量
+	// @inject_tag: toml:"conn_max_idle_second"
+	ConnMaxIdleSecond *int64 `protobuf:"varint,1,opt,name=conn_max_idle_second,json=connMaxIdleSecond,proto3,oneof" json:"conn_max_idle_second,omitempty" toml:"conn_max_idle_second"` // 单位是秒
+	// @inject_tag: toml:"conn_max_life_second"
+	ConnMaxLifeSecond *int64 `protobuf:"varint,2,opt,name=conn_max_life_second,json=connMaxLifeSecond,proto3,oneof" json:"conn_max_life_second,omitempty" toml:"conn_max_life_second"` // 单位是秒
+	// @inject_tag: toml:"max_open_conn"
+	MaxOpenConn *int32 `protobuf:"varint,3,opt,name=max_open_conn,json=maxOpenConn,proto3,oneof" json:"max_open_conn,omitempty" toml:"max_open_conn"` // 最大链接数量
+	// @inject_tag: toml:"max_idle_conn"
+	MaxIdleConn *int32 `protobuf:"varint,4,opt,name=max_idle_conn,json=maxIdleConn,proto3,oneof" json:"max_idle_conn,omitempty" toml:"max_idle_conn"` // 最大空闲链接数量
 }
 
 func (x *ConnConfig) Reset() {
@@ -213,8 +220,10 @@ type LogConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Level         LogConfig_LogLevel `protobuf:"varint,1,opt,name=level,proto3,enum=db.config.LogConfig_LogLevel" json:"level,omitempty"`            // 日志等级
-	SlowLogSecond *int64             `protobuf:"varint,2,opt,name=slow_log_second,json=slowLogSecond,proto3,oneof" json:"slow_log_second,omitempty"` // 慢查询日志
+	// @inject_tag: toml:"level"
+	Level LogConfig_LogLevel `protobuf:"varint,1,opt,name=level,proto3,enum=db.config.LogConfig_LogLevel" json:"level,omitempty" toml:"level"` // 日志等级
+	// @inject_tag: toml:"slow_log_second"
+	SlowLogSecond *int64 `protobuf:"varint,2,opt,name=slow_log_second,json=slowLogSecond,proto3,oneof" json:"slow_log_second,omitempty" toml:"slow_log_second"` // 慢查询日志
 }
 
 func (x *LogConfig) Reset() {

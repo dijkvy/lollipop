@@ -7,15 +7,29 @@ import "google/protobuf/timestamp.proto";
 
 // mysql 数据库链接配置
 message MySQLConfig {
+
+  // @inject_tag: toml:"dsn"
   string     dsn         = 1; // 数据源
+
+  // @inject_tag: toml:"conn_config"
   ConnConfig conn_config = 2; // 链接配置
+
+  // @inject_tag: toml:"log_config"
   LogConfig  log_config  = 3; // 日志配置
 }
 
 message ConnConfig {
+
+  // @inject_tag: toml:"conn_max_idle_second"
   optional int64 conn_max_idle_second = 1; // 单位是秒
+
+  // @inject_tag: toml:"conn_max_life_second"
   optional int64 conn_max_life_second = 2; // 单位是秒
+
+  // @inject_tag: toml:"max_open_conn"
   optional int32 max_open_conn        = 3; // 最大链接数量
+
+  // @inject_tag: toml:"max_idle_conn"
   optional int32 max_idle_conn        = 4; // 最大空闲链接数量
 }
 
@@ -26,6 +40,9 @@ message LogConfig {
     Warn    = 2;
     Error   = 3;
   }
+  // @inject_tag: toml:"level"
   LogLevel       level           = 1; // 日志等级
+
+  // @inject_tag: toml:"slow_log_second"
   optional int64 slow_log_second = 2; // 慢查询日志
 }

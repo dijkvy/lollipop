@@ -11,6 +11,8 @@ require (
 	github.com/spf13/cast v1.3.1
 	go.etcd.io/etcd/client/v3 v3.5.0-rc.1
 	go.opentelemetry.io/otel v0.20.0
+	go.opentelemetry.io/otel/exporters/trace/jaeger v0.20.0
+	go.opentelemetry.io/otel/sdk v0.20.0
 	go.opentelemetry.io/otel/trace v0.20.0
 	go.uber.org/zap v1.17.0
 	google.golang.org/protobuf v1.26.0

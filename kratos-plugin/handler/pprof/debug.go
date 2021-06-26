@@ -1,9 +1,9 @@
 package pprof
 
 import (
+	"github.com/go-kratos/kratos/v2/transport/http"
 	"net/http/pprof"
 )
-import "github.com/go-kratos/kratos/v2/transport/http"
 
 func RegisterPprof(srv *http.Server) {
 	srv.HandleFunc("/debug/pprof/", pprof.Index)

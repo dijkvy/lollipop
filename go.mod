@@ -3,10 +3,12 @@ module github.com/laxiaohong/lollipop
 go 1.16
 
 require (
+	github.com/arl/statsviz v0.4.0
 	github.com/go-kratos/consul v0.1.1
 	github.com/go-kratos/etcd v0.1.1
 	github.com/go-kratos/kratos/v2 v2.0.0-rc6
 	github.com/google/wire v0.5.0
+	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/consul/api v1.9.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/sirupsen/logrus v1.8.1

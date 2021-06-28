@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-func NewCoreLogger(logger *zap.Logger) *CoreLogger {
+func NewCoreLogger(logger *zap.Logger, opts ...Option) *CoreLogger {
 	return &CoreLogger{
 		logger: logger,
 		pool: &sync.Pool{
@@ -18,44 +18,42 @@ func NewCoreLogger(logger *zap.Logger) *CoreLogger {
 				return new(bytes.Buffer)
 			},
 		},
+		option: []Option{withTraceId()},
 	}
 }
 
 type CoreLogger struct {
 	logger *zap.Logger
 	pool   *sync.Pool
+	option []Option
 }
 
 // Option type
-type Option = func(ctx context.Context) func(c *loggerPointConfig)
+type Option = func(ctx context.Context) zap.Field
 
 // default option
 func withTraceId() Option {
-	return func(ctx context.Context) func(c *loggerPointConfig) {
-		return func(c *loggerPointConfig) {
-			c.field = append(c.field, zap.String("trace_id", getTraceId(ctx)))
-		}
+	return func(ctx context.Context) (field zap.Field) {
+		return zap.String("trace_id", getTraceId(ctx))
 	}
 }
 
-func (c *CoreLogger) WithContext(ctx context.Context, opts ...Option) *helper {
+func (c *CoreLogger) WithContext(ctx context.Context) *helper {
 
-	cfg := &loggerPointConfig{}
-	opts = append(opts, withTraceId())
-
-	for _, v := range opts {
-		v(ctx)(cfg)
+	var field []zap.Field
+	for _, v := range c.option {
+		field = append(field, v(ctx))
 	}
 
 	return &helper{logger: &loggerPoint{
 		logger: c.logger,
 		pool:   c.pool,
-		field:  cfg.field,
+		field:  field,
 		ctx:    ctx,
 	}}
 }
 
-type loggerPointConfig struct {
+type LoggerPointConfig struct {
 	field []zap.Field
 }
 
@@ -90,9 +88,6 @@ func (c *loggerPoint) Log(level log.Level, keyvals ...interface{}) error {
 		c.logger.Warn(buf.String(), c.field...)
 	case log.LevelError:
 		c.logger.Error(buf.String(), c.field...)
-	//default:
-	//	c.logger.Debug(buf.String(), c.field...)
-
 	}
 
 	buf.Reset()

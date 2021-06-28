@@ -18,7 +18,7 @@ func NewCoreLogger(logger *zap.Logger, opts ...Option) *CoreLogger {
 				return new(bytes.Buffer)
 			},
 		},
-		option: []Option{withTraceId()},
+		option: append(opts, withTraceId()),
 	}
 }
 

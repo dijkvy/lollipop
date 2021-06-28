@@ -29,12 +29,12 @@ type CoreLogger struct {
 }
 
 // Option type
-type Option = func(ctx context.Context) zap.Field
+type Option = func(ctx context.Context) (ok bool, field zap.Field)
 
 // default option
 func withTraceId() Option {
-	return func(ctx context.Context) (field zap.Field) {
-		return zap.String("trace_id", getTraceId(ctx))
+	return func(ctx context.Context) (bool, zap.Field) {
+		return true, zap.String("trace_id", getTraceId(ctx))
 	}
 }
 
@@ -42,7 +42,10 @@ func (c *CoreLogger) WithContext(ctx context.Context) *helper {
 
 	var field []zap.Field
 	for _, v := range c.option {
-		field = append(field, v(ctx))
+		if ok, f := v(ctx); ok {
+			field = append(field, f)
+		}
+
 	}
 
 	return &helper{logger: &loggerPoint{

@@ -34,7 +34,9 @@ type Option = func(ctx context.Context) (field zap.Field, ok bool)
 // default option
 func withTraceId() Option {
 	return func(ctx context.Context) (zap.Field, bool) {
-		return zap.String("trace_id", getTraceId(ctx)), true
+		v := getTraceId(ctx)
+		f := zap.String("trace_id", v)
+		return f, v != ""
 	}
 }
 

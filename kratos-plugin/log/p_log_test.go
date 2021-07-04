@@ -41,17 +41,24 @@ func BenchmarkNewCoreLogger(b *testing.B) {
 func TestNewCoreLogger_Example(_ *testing.T) {
 	var outputConsole = new(bool)
 	*outputConsole = true
+	// 生成 zapLog 的对象
 	zapLogger := zap_log.NewZapLogger(&config.ZapLoggerConfig{Path: "logs", Level: "debug", DebugModeOutputConsole: outputConsole})
+	// 同步日志
 	defer zapLogger.Sync()
+
+	// 回调钩子函数
 	var hooks []Option
 	hooks = append(hooks, func(ctx context.Context) (field zap.Field, ok bool) {
 		traceId := getTraceId(ctx)
-		return zap.String("trace_id", traceId), traceId != ""
+		return zap.String("trace_id", traceId), traceId != "" // 是否需要将 field 对象加入到 log 日志中
 	})
 	hooks = append(hooks, func(ctx context.Context) (field zap.Field, ok bool) {
 		return zap.String("ts", time.Now().Format("20060102-15:04:05:06.999")), true
 	})
+	// 业务使用的 logger 对象
 	logger := NewCoreLogger(zapLogger, hooks...)
+
+	// 正常打印日志
 	var err error = errors.New("div by zero")
 
 	logger.WithContext(context.Background()).Errorf("data error %+v", err)

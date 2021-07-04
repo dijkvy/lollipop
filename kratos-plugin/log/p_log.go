@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"sync"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
-	"sync"
 )
 
 func NewCoreLogger(logger *zap.Logger, opts ...Option) *CoreLogger {

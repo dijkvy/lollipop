@@ -22,6 +22,9 @@ func NewDB(cfg *config.MySQLConfig, logger *zap.Logger) (*DB, func()) {
 	logrus.Infof("NewDB config:%#v", cfg.String())
 	namingStrategy := schema.NamingStrategy{SingularTable: true, NoLowerCase: false}
 	logrus.Info(namingStrategy)
+	if cfg.GetLogConfig() == nil {
+		panic("gorm logger config is nil")
+	}
 	db, err := gorm.Open(mysql.Open(cfg.GetDsn()),
 		&gorm.Config{
 			Logger: log.NewLogger(logger, gormLogger.Config{
@@ -38,7 +41,7 @@ func NewDB(cfg *config.MySQLConfig, logger *zap.Logger) (*DB, func()) {
 	if err != nil {
 		panic(err)
 	}
-	if cfg.GetConnConfig().MaxOpenConn != nil {
+	if cfg.GetConnConfig() != nil && cfg.GetConnConfig().MaxOpenConn != nil {
 		logrus.Info(_prefixLog, "maxIdleConn", cfg.GetConnConfig().GetMaxIdleConn())
 		_db.SetMaxOpenConns(int(cfg.GetConnConfig().GetMaxOpenConn()))
 	} else {
@@ -46,7 +49,7 @@ func NewDB(cfg *config.MySQLConfig, logger *zap.Logger) (*DB, func()) {
 		_db.SetMaxOpenConns(100)
 	}
 
-	if cfg.GetConnConfig().ConnMaxLifeSecond != nil {
+	if cfg.GetConnConfig() != nil && cfg.GetConnConfig().ConnMaxLifeSecond != nil {
 		logrus.Info(_prefixLog, "maxIdleSecond", time.Duration(cfg.GetConnConfig().GetConnMaxIdleSecond()*int64(time.Second)).String())
 		_db.SetConnMaxLifetime(time.Duration(cfg.GetConnConfig().GetConnMaxIdleSecond()) * time.Second)
 	} else {
@@ -54,7 +57,7 @@ func NewDB(cfg *config.MySQLConfig, logger *zap.Logger) (*DB, func()) {
 		_db.SetConnMaxLifetime(3600 * time.Second)
 	}
 
-	if cfg.GetConnConfig().ConnMaxIdleSecond != nil {
+	if cfg.GetConnConfig() != nil && cfg.GetConnConfig().ConnMaxIdleSecond != nil {
 		logrus.Info(_prefixLog, "maxIdleConn", cfg.GetConnConfig().GetMaxIdleConn())
 		_db.SetMaxIdleConns(int(cfg.GetConnConfig().GetMaxIdleConn()))
 	} else {
@@ -62,7 +65,7 @@ func NewDB(cfg *config.MySQLConfig, logger *zap.Logger) (*DB, func()) {
 		_db.SetMaxIdleConns(100)
 	}
 
-	if cfg.GetConnConfig().ConnMaxIdleSecond != nil {
+	if cfg.GetConnConfig() != nil && cfg.GetConnConfig().ConnMaxIdleSecond != nil {
 		logrus.Info(_prefixLog, "connMaxIdleSecond", time.Duration(cfg.GetConnConfig().GetConnMaxIdleSecond()*int64(time.Second)).String())
 		_db.SetConnMaxIdleTime(time.Duration(cfg.GetConnConfig().GetConnMaxIdleSecond()) * time.Second)
 	} else {
